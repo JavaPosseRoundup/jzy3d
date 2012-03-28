@@ -1,4 +1,4 @@
-package org.jzy3d.ui;
+package org.jzy3d.bridge;
 
 import java.awt.Dimension;
 import java.awt.Rectangle;
@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 
 
-public class Plugs {
+public class PlugsImpl {
 
 	public static void frame(Chart chart){
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();

@@ -1,0 +1,4 @@
+include 'jzy3d-bridge'
+include 'jzy3d-api'
+
+rootProject.name = 'jzy3d-parent'
