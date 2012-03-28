@@ -1,5 +1,7 @@
 build/
 *.iml
+*.ipr
+*.iws
 atlassian-ide-plugin.xml
 .idea/
 out/

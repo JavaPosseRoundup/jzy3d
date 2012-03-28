@@ -28,22 +28,22 @@ buildscript {
 }
 
 allprojects {
-	group = 'org.jzy3d'
-	version = property('jzy3d-version')
-	apply plugin: 'idea'
-	apply plugin: 'artifactory'
+    group = 'org.jzy3d'
+    version = property('jzy3d-version')
+    apply plugin: 'idea'
+    apply plugin: 'artifactory'
 }
 
 artifactory {
     contextUrl = 'http://javaposse.artifactoryonline.com/javaposse'
     publish {
-	repository {
-		repoKey='jogl-local'
-		if (hasProperty('javaposse_user')) {
-			username=property('javaposse_user')
-			password=property('javaposse_password')
-		}
-	}
+        repository {
+            repoKey = 'jogl-local'
+            if (hasProperty('javaposse_user')) {
+                username = property('javaposse_user')
+                password = property('javaposse_password')
+            }
+        }
         defaults {
             publishConfigs('extraPublish', 'archives')
             publishIvy = false
@@ -63,68 +63,64 @@ artifactory {
 artifactoryPublish.skip = true
 
 subprojects {
-	// Something Fishy here! Ask Hans
-	repositories {
-		maven { url = 'http://javaposse.artifactoryonline.com/javaposse/jogl-libs' }
-	}
+    // Something Fishy here! Ask Hans
+    repositories {
+        maven { url = 'http://javaposse.artifactoryonline.com/javaposse/jogl-libs' }
+    }
 
-	apply plugin: 'java'
-	apply plugin: 'maven'
+    apply plugin: 'java'
+    apply plugin: 'maven'
 
-	idea {
-		project {
-		    javaVersion = '1.6'
-		}
-	}
+    idea {
+        project {
+            javaVersion = '1.6'
+        }
+    }
 
-	configurations {
-		extraPublish
-	}
+    configurations {
+        extraPublish
+    }
 
-	task sourceJar(type: Jar) {
-		classifier = 'sources'
-		from sourceSets.main.java
-	}
+    task sourceJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.java
+    }
 
-	artifacts {
-		extraPublish sourceJar
-	}
+    artifacts {
+        extraPublish sourceJar
+    }
 
-	artifactoryPublish {
-		dependsOn: build
-	}
+    artifactoryPublish {
+        dependsOn: build
+    }
 
-	uploadArchives {
-		uploadDescriptor = true
-	}
+    uploadArchives {
+        uploadDescriptor = true
+    }
 }
 
 project('jzy3d-api') {
     description = 'jzy3d API Project'
 
-	dependencies {
-		compile(group: 'org.convexhull', name: 'convexhull', version: '1.0')
-		compile(group: 'net.sf.opencsv', name: 'opencsv', version: '2.3')
-		compile(group: 'com.jogamp', name: 'jogl-all', version: '2.0')
-		compile(group: 'com.jogamp', name: 'gluegen', version: '2.0', classifier: 'rt')
-//		compile(group: 'swt', name: 'swt-linux-gtk', version: '3.0.1')
-		//compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86', version: '3.3.0-v3346')
-		compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86_64', version: '3.3.0-v3346')
-		//compile(group: 'org.eclipse.swt.carbon', name: 'macosx', version: '3.3.0-v3346')
-		//compile(group: 'org.eclipse.swt.win32.win32', name: 'x86', version: '3.3.0-v3346')
-	}
+    dependencies {
+        compile(group: 'org.convexhull', name: 'convexhull', version: '1.0')
+        compile(group: 'net.sf.opencsv', name: 'opencsv', version: '2.3')
+        compile(group: 'com.jogamp', name: 'jogl-all', version: '2.0')
+        compile(group: 'com.jogamp', name: 'gluegen', version: '2.0', classifier: 'rt')
+        // TODO: Include the good SWT depending on the OS and also all the above plus OS classifier
+        //compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86', version: '3.3.0-v3346')
+        compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86_64', version: '3.3.0-v3346')
+        //compile(group: 'org.eclipse.swt.carbon', name: 'macosx', version: '3.3.0-v3346')
+        //compile(group: 'org.eclipse.swt.win32.win32', name: 'x86', version: '3.3.0-v3346')
+    }
 }
 
 project('jzy3d-bridge') {
     description = 'jzy3d Bridge to windowing systems Project'
 
-	dependencies {
-	        compile project(':jzy3d-api')
-		//compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86', version: '3.3.0-v3346')
-//		compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86_64', version: '3.3.0-v3346')
-		//compile(group: 'org.eclipse.swt.carbon', name: 'macosx', version: '3.3.0-v3346')
-		//compile(group: 'org.eclipse.swt.win32.win32', name: 'x86', version: '3.3.0-v3346')
-	}
+    dependencies {
+        compile project(':jzy3d-api')
+    }
 }
 
 
