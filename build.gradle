@@ -39,13 +39,12 @@ artifactory {
     publish {
         repository {
             repoKey = 'jogl-local'
-            if (hasProperty('javaposse_user')) {
-                username = property('javaposse_user')
-                password = property('javaposse_password')
-            }
+            //if (hasProperty('javaposse_user')) {
+                username = "${javaposse_user}"
+                password = "${javaposse_password}"
+            //}
         }
         defaults {
-            publishConfigs('extraPublish', 'archives')
             publishIvy = false
             publishPom = true
         }
@@ -90,10 +89,13 @@ subprojects {
         extraPublish sourceJar
     }
 
+    /*
     artifactoryPublish {
         dependsOn: build
+        dependsOn: sourceJar
+        publishConfigs(configurations.extraPublish, configurations.archives)
     }
-
+    */
     uploadArchives {
         uploadDescriptor = true
     }
