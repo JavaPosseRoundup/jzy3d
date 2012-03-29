@@ -39,34 +39,27 @@ artifactory {
     publish {
         repository {
             repoKey = 'jogl-local'
-            //if (hasProperty('javaposse_user')) {
+            if (project.hasProperty('javaposse_user')) {
                 username = "${javaposse_user}"
                 password = "${javaposse_password}"
-            //}
+            }
         }
         defaults {
+            publishConfigs('extraPublish', 'archives')
             publishIvy = false
             publishPom = true
         }
     }
-/*
     resolve {
         repository {
             repoKey = 'jogl-libs'
-		maven=true
         }
     }
-*/
 }
 
 artifactoryPublish.skip = true
 
 subprojects {
-    // Something Fishy here! Ask Hans
-    repositories {
-        maven { url = 'http://javaposse.artifactoryonline.com/javaposse/jogl-libs' }
-    }
-
     apply plugin: 'java'
     apply plugin: 'maven'
 
@@ -82,20 +75,17 @@ subprojects {
 
     task sourceJar(type: Jar) {
         classifier = 'sources'
-        from sourceSets.main.java
+        source = sourceSets.main.java
     }
 
     artifacts {
         extraPublish sourceJar
     }
 
-    /*
     artifactoryPublish {
-        dependsOn: build
-        dependsOn: sourceJar
-        publishConfigs(configurations.extraPublish, configurations.archives)
+        dependsOn build
     }
-    */
+
     uploadArchives {
         uploadDescriptor = true
     }
@@ -122,6 +112,16 @@ project('jzy3d-bridge') {
 
     dependencies {
         compile project(':jzy3d-api')
+    }
+}
+
+project('jzy3d-demos') {
+    description = 'jzy3d Demos Project'
+
+    dependencies {
+        compile project(':jzy3d-bridge')
+        runtime(group: 'com.jogamp', name: 'jogl-all', version: '2.0', classifier: 'linux64')
+        runtime(group: 'com.jogamp', name: 'gluegen', version: '2.0', classifier: 'rt-linux64')
     }
 }
 
