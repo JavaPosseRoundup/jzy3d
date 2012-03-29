@@ -59,15 +59,25 @@ artifactory {
 
 artifactoryPublish.skip = true
 
+idea {
+    project {
+        jdkName = '1.6'
+        languageLevel = '1.6'
+        wildcards += '?*.gradle'
+        ipr {
+            withXml { provider ->
+                def node = provider.asNode()
+                // Use git
+                def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
+                vcsConfig.mapping[0].'@vcs' = 'Git'
+            }
+        }
+    }
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'maven'
-
-    idea {
-        project {
-            javaVersion = '1.6'
-        }
-    }
 
     configurations {
         extraPublish
@@ -75,7 +85,7 @@ subprojects {
 
     task sourceJar(type: Jar) {
         classifier = 'sources'
-        source = sourceSets.main.java
+        from sourceSets.main.java
     }
 
     artifacts {
@@ -98,12 +108,13 @@ project('jzy3d-api') {
         compile(group: 'org.convexhull', name: 'convexhull', version: '1.0')
         compile(group: 'net.sf.opencsv', name: 'opencsv', version: '2.3')
         compile(group: 'com.jogamp', name: 'jogl-all', version: '2.0')
-        compile(group: 'com.jogamp', name: 'gluegen', version: '2.0', classifier: 'rt')
+        compile(group: 'com.jogamp', name: 'gluegen', version: '2.0')
         // TODO: Include the good SWT depending on the OS and also all the above plus OS classifier
         //compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86', version: '3.3.0-v3346')
         compile(group: 'org.eclipse.swt.gtk.linux', name: 'x86_64', version: '3.3.0-v3346')
         //compile(group: 'org.eclipse.swt.carbon', name: 'macosx', version: '3.3.0-v3346')
         //compile(group: 'org.eclipse.swt.win32.win32', name: 'x86', version: '3.3.0-v3346')
+        runtime(group: 'com.jogamp', name: 'gluegen', version: '2.0', classifier: 'rt')
     }
 }
 

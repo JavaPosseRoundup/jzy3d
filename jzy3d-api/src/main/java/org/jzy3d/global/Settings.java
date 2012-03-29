@@ -15,6 +15,7 @@ public class Settings {
 	 * the synchronized definition of getInstance().*/
 	public static synchronized Settings getInstance(){
 		if(instance==null){
+            NativeLibraryLoader.loadLibraries();
 			instance = new Settings();
 			instance.setHardwareAccelerated(false);
 		}
